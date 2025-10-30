@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Organisasi Paskibra - Index</title>
+  <style>
+    :root{
+      --red:#b22222;
+      --cream:#fff7ed;
+      --card-bg: #fff;
+      --muted:#6b6b6b;
+      --gap:16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,var(--cream), #fff);
+      color:#111;
+      padding:32px;
+      display:flex;
+      justify-content:center;
+    }
+    .container{
+      max-width:1000px;
+      width:100%;
+      background:rgba(255,255,255,0.75);
+      border-radius:12px;
+      padding:28px;
+      box-shadow:0 8px 30px rgba(0,0,0,0.08);
+    }
+    header{
+      text-align:center;
+      margin-bottom:20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    .logo{
+      width:80px;
+      height:80px;
+      object-fit:contain;
+    }
+    .org-title{
+      font-size:2.2rem;
+      color:var(--red);
+      margin:0;
+    }
+    .org-sub{margin-top:8px;color:var(--muted)}
+    .intro{
+      background:linear-gradient(90deg, rgba(178,34,34,0.06), rgba(255,247,237,0.6));
+      border-radius:10px;
+      padding:16px;
+      margin:18px 0 26px;
+    }
+    .controls{
+      display:flex;
+      gap:var(--gap);
+      justify-content:center;
+      align-items:center;
+      margin-bottom:18px;
+      flex-wrap:wrap;
+    }
+    select, button{
+      padding:10px 12px;
+      border-radius:8px;
+      border:1px solid rgba(0,0,0,0.08);
+      font-size:0.95rem;
+    }
+    button{
+      background:var(--red);
+      color:#fff;
+      border:none;
+      cursor:pointer;
+    }
+    .members-grid, .gallery-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+      gap:18px;
+      justify-items:center;
+    }
+    .member-card, .gallery-card{
+      width:100%;
+      max-width:220px;
+      background:var(--card-bg);
+      border-radius:12px;
+      padding:12px;
+      text-align:center;
+      box-shadow:0 6px 18px rgba(0,0,0,0.06);
+      transition:transform .18s ease,box-shadow .18s ease;
+    }
+    .member-card:hover, .gallery-card:hover{
+      transform:translateY(-6px);
+      box-shadow:0 18px 40px rgba(0,0,0,0.09);
+    }
+    .member-img, .gallery-img{
+      width:120px;height:120px;border-radius:999px;object-fit:cover;margin:0 auto 10px;display:block;border:4px solid var(--cream);
+    }
+    .gallery-img{
+      width:100%;
+      height:140px;
+      border-radius:10px;
+      border:none;
+    }
+    .member-name{font-weight:600;margin:6px 0 2px}
+    .member-role{font-size:0.86rem;color:var(--muted)}
+    .gallery-desc{font-size:0.9rem;color:var(--muted);margin-top:6px}
+    .cohort-heading, .gallery-heading{
+      text-align:center;
+      margin:24px 0 12px;
+      font-size:1.1rem;
+      color:var(--red);
+      font-weight:700;
+    }
+    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:0.9rem}
+    @media (max-width:420px){
+      .org-title{font-size:1.5rem}
+      .member-img{width:100px;height:100px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <img src="Paskibra.png" alt="Logo Paskibra" class="logo">
+      <div>
+        <h1 class="org-title">Paskibra UNIT 113 UPT SMAN 13 TAKALAR</h1>
+        <p class="org-sub">Membangun disiplin, karakter, dan kebersamaan melalui pelatihan baris-berbaris & kepemimpinan.</p>
+      </div>
+    </header>
+
+    <section class="intro">
+      <strong>Ringkasan Organisasi</strong>
+      <p>Paskibra (Pasukan Pengibar Bendera) adalah organisasi yang melatih kedisiplinan, kerja sama, dan jiwa kepemimpinan siswa. Kami berkomitmen untuk menjadi contoh dan teladan di lingkungan sekolah.</p>
+    </section>
+
+    <!-- 🔴 Bagian Galeri dipindahkan ke atas -->
+    <h2 class="gallery-heading">Galeri Kegiatan</h2>
+    <div id="galleryContainer" class="gallery-grid"></div>
+
+    <div class="controls">
+      <label for="cohortSelect" style="font-weight:600;color:var(--red);">Pilih Angkatan:</label>
+      <select id="cohortSelect"></select>
+      <button id="showAllBtn">Tampilkan Semua</button>
+    </div>
+
+    <div id="membersContainer"></div>
+
+    <footer>File: <code>index.html</code> — Siap diunggah ke GitHub Pages</footer>
+  </div>
+
+  <script>
+    const members = [
+      {name: 'Ibu Sri Wahyuni', role:'Pembina Utama', cohort:'pembina', img:'/images/pembina/sri.jpg'},
+      {name: 'Ahmad Firmansyah', role:'Pendiri', cohort:'pendiri', img:'/images/pendiri/ahmad.jpg'},
+      {name: 'Jhon Doe', role:'Ketua', cohort:0, img:'/images/angkatan0/jhon.jpg'},
+      {name: 'Siti Aminah', role:'Wakil', cohort:0, img:'/images/angkatan0/siti.jpg'},
+      {name: 'Budi Santoso', role:'Anggota', cohort:1, img:'/images/angkatan1/budi.jpg'},
+      {name: 'Dewi Putri', role:'Anggota', cohort:1, img:'/images/angkatan1/dewi.jpg'},
+      {name: 'Rahmat Hidayat', role:'Anggota', cohort:2, img:'/images/angkatan2/rahmat.jpg'},
+      {name: 'Lina Agustina', role:'Anggota', cohort:3, img:'/images/angkatan3/lina.jpg'},
+      {name: 'Rizky Maulana', role:'Anggota', cohort:4, img:'/images/angkatan4/rizky.jpg'},
+      {name: 'Putri Ayu', role:'Anggota', cohort:5, img:'/images/angkatan5/putri.jpg'},
+      {name: 'Hasir', role:'Anggota', cohort:6, img:'hasir.png'},
+      {name: 'Hasir', role:'Anggota', cohort:6, img:'hasir.png'}, 
+      {name: 'Maghfira Nurman', role:'Anggota', cohort:6, img:'pira.png'},
+      {name: 'Hasir', role:'Anggota', cohort:6, img:'zul.png'},
+      {name: 'Nadia Salsabila', role:'Anggota', cohort:7, img:'/images/angkatan7/nadia.jpg'},
+      {name: 'Andi Pratama', role:'Anggota', cohort:8, img:'/images/angkatan8/andi.jpg'}
+    ];
+
+    const gallery = [
+      {img:'/images/kegiatan/upacara.jpg', desc:'Upacara bendera setiap hari Senin di lapangan sekolah.'},
+      {img:'/images/kegiatan/latihan.jpg', desc:'Latihan rutin baris-berbaris untuk persiapan lomba dan upacara.'},
+      {img:'/images/kegiatan/pelantikan.jpg', desc:'Pelantikan anggota baru sebagai bentuk pengukuhan semangat Paskibra.'},
+      {img:'/images/kegiatan/lomba.jpg', desc:'Partisipasi dalam lomba PBB tingkat kabupaten dan provinsi.'},
+      {img:'/images/kegiatan/bakti.jpg', desc:'Kegiatan bakti sosial bersama masyarakat sekitar sekolah.'}
+    ];
+
+    const cohorts = Array.from(new Set(members.map(m=>m.cohort))).sort((a,b)=>{
+      if(a==='pembina') return -1;
+      if(b==='pembina') return 1;
+      if(a==='pendiri') return -1;
+      if(b==='pendiri') return 1;
+      return b - a;
+    });
+
+    const cohortSelect = document.getElementById('cohortSelect');
+    const membersContainer = document.getElementById('membersContainer');
+    const showAllBtn = document.getElementById('showAllBtn');
+    const galleryContainer = document.getElementById('galleryContainer');
+
+    function populateCohortSelect(){
+      cohortSelect.innerHTML = '';
+      const optDefault = document.createElement('option');
+      optDefault.value = 'all';
+      optDefault.textContent = 'Semua Angkatan';
+      cohortSelect.appendChild(optDefault);
+      cohorts.forEach(c=>{
+        const o = document.createElement('option');
+        o.value = String(c);
+        if(c==='pembina') o.textContent = 'Pembina';
+        else if(c==='pendiri') o.textContent = 'Pendiri';
+        else o.textContent = `Angkatan ${c}`;
+        cohortSelect.appendChild(o);
+      });
+    }
+
+    function renderMembers(filterCohort){
+      membersContainer.innerHTML = '';
+      const groups = {};
+      members.forEach(m=>{
+        if(filterCohort && filterCohort!=='all' && String(m.cohort)!==String(filterCohort)) return;
+        groups[m.cohort] = groups[m.cohort] || [];
+        groups[m.cohort].push(m);
+      });
+
+      if(Object.keys(groups).length===0){
+        membersContainer.innerHTML = '<p style="text-align:center;color:var(--muted)">Tidak ada anggota untuk angkatan tersebut.</p>';
+        return;
+      }
+
+      Object.keys(groups).sort((a,b)=>{
+        if(a==='pembina') return -1;
+        if(b==='pembina') return 1;
+        if(a==='pendiri') return -1;
+        if(b==='pendiri') return 1;
+        return b - a;
+      }).forEach(coh=>{
+        const h = document.createElement('h3');
+        h.className = 'cohort-heading';
+        h.textContent = (coh==='pembina')?'Pembina':(coh==='pendiri')?'Pendiri':`Angkatan ${coh}`;
+        membersContainer.appendChild(h);
+
+        const grid = document.createElement('div');
+        grid.className = 'members-grid';
+
+        groups[coh].forEach(mem=>{
+          const card = document.createElement('div');
+          card.className = 'member-card';
+          const img = document.createElement('img');
+          img.className = 'member-img';
+          img.onerror = function(){
+            this.src='data:image/svg+xml;utf8,'+
+              encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240"><rect width="100%" height="100%" fill="#f3f3f3"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#c1c1c1" font-family="Arial, sans-serif" font-size="16">Foto tidak tersedia</text></svg>');
+          }
+          img.src = mem.img;
+          img.alt = mem.name;
+
+          const name = document.createElement('div');
+          name.className = 'member-name';
+          name.textContent = mem.name;
+
+          const role = document.createElement('div');
+          role.className = 'member-role';
+          role.textContent = mem.role;
+
+          card.appendChild(img);
+          card.appendChild(name);
+          card.appendChild(role);
+          grid.appendChild(card);
+        });
+
+        membersContainer.appendChild(grid);
+      });
+    }
+
+    function renderGallery(){
+      galleryContainer.innerHTML = '';
+      gallery.forEach(item=>{
+        const card = document.createElement('div');
+        card.className = 'gallery-card';
+        const img = document.createElement('img');
+        img.className = 'gallery-img';
+        img.src = item.img;
+        img.alt = 'Foto kegiatan Paskibra';
+        img.onerror = function(){
+          this.src='data:image/svg+xml;utf8,'+
+            encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="240" height="140"><rect width="100%" height="100%" fill="#f3f3f3"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#c1c1c1" font-family="Arial, sans-serif" font-size="14">Foto kegiatan</text></svg>');
+        };
+        const desc = document.createElement('div');
+        desc.className = 'gallery-desc';
+        desc.textContent = item.desc;
+        card.appendChild(img);
+        card.appendChild(desc);
+        galleryContainer.appendChild(card);
+      });
+    }
+
+    cohortSelect.addEventListener('change', ()=>renderMembers(cohortSelect.value));
+    showAllBtn.addEventListener('click', ()=>{cohortSelect.value='all';renderMembers('all')});
+
+    populateCohortSelect();
+    renderGallery(); // tampilkan dulu kegiatan
+    renderMembers('all'); // lalu pembina & anggota
+  </script>
+</body>
+</html>
